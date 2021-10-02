@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
+    [SerializeField] private GameObject lockObject;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Player player = collision.GetComponent<Player>();
@@ -11,6 +13,7 @@ public class Door : MonoBehaviour
         {
             if (player.HasKey)
             {
+                Destroy(lockObject);
                 GameManager.Instance.StateOfGame = GameManager.GameState.Win;
             }
         }

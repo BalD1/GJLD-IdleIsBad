@@ -5,6 +5,7 @@ using UnityEngine;
 public class UnstableGround : MonoBehaviour
 {
     [SerializeField] private float timeBeforeDestruction = 1;
+    [SerializeField] private Animator animator;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -16,6 +17,7 @@ public class UnstableGround : MonoBehaviour
 
     private IEnumerator destructionTimer(float timer)
     {
+        animator.SetTrigger("Break");
         yield return new WaitForSeconds(timer);
         Destroy(this.gameObject);
     }

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    private static GameManager instance;
     public static GameManager Instance
     {
         get
@@ -56,6 +56,13 @@ public class GameManager : MonoBehaviour
                 case GameState.Win:
                     player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                     Time.timeScale = 0;
+
+                    if(DataKeep.higherUnlockedLevel == loadedMap.index)
+                    {
+                        if (loadedMap.index < maps.Count - 1)
+                        DataKeep.higherUnlockedLevel += 1;
+                        PlayerPrefs.SetInt(PlayerPrefKeys.HigherUnlockedLevel.ToString(), DataKeep.higherUnlockedLevel);
+                    }
                     break;
             }
             gameState = value;
@@ -63,14 +70,30 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public enum PlayerPrefKeys
+    {
+        HigherUnlockedLevel,
+    }
+
     [SerializeField] private GameObject player;
     [SerializeField] private List<GameObject> maps;
-    private struct LoadedMap
+#if UNITY_EDITOR
+    [SerializeField] private bool resetProgress;
+#endif
+    public List<GameObject> Maps
+    {
+        get => maps;
+    }
+    public struct LoadedMap
     {
         public int index;
         public GameObject map;
     }
     private LoadedMap loadedMap;
+    public LoadedMap GetLoadedMap
+    {
+        get => loadedMap;
+    }
 
     private void Awake()
     {
@@ -79,11 +102,24 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        if (loadedMap.map == null && StateOfGame != GameState.MainMenu)
+        if(loadedMap.map == null && StateOfGame != GameState.MainMenu)
         {
             loadedMap.map = GameObject.Instantiate(maps[DataKeep.mapToLoad - 1], Vector3.zero, Quaternion.identity);
             loadedMap.index = DataKeep.mapToLoad - 1;
         }
+
+        if(PlayerPrefs.HasKey(PlayerPrefKeys.HigherUnlockedLevel.ToString()))
+            DataKeep.higherUnlockedLevel = PlayerPrefs.GetInt(PlayerPrefKeys.HigherUnlockedLevel.ToString());
+        else
+        {
+            PlayerPrefs.SetInt(PlayerPrefKeys.HigherUnlockedLevel.ToString(), 0);
+            DataKeep.higherUnlockedLevel = PlayerPrefs.GetInt(PlayerPrefKeys.HigherUnlockedLevel.ToString());
+        }
+
+#if UNITY_EDITOR
+        if (resetProgress)
+            PlayerPrefs.SetInt(PlayerPrefKeys.HigherUnlockedLevel.ToString(), 0);
+#endif
     }
 
     public void ChangeScene(string sceneToLoad)

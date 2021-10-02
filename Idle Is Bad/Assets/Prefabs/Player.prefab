@@ -89,7 +89,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 6.768518
+  orthographic size: 8
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -162,15 +162,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  jumpHeight: 8
+  jumpHeight: 6
+  jumpTime: 0.5
   groundCheck: {fileID: 6700494538590805575}
-  groundCheckRadius: 0.3
+  groundCheckLength: 0.075
   groundMask:
     serializedVersion: 2
     m_Bits: 256
+  boxCollider: {fileID: 6700494538990673747}
   body: {fileID: 6700494538990673746}
   spriteRenderer: {fileID: 6700494538990673751}
   hasKey: 0
+  currentControl: 0
+  playerCamera: {fileID: 6700494538739604140}
+  cameraSpeed: 100
+  cameraClamp: {x: 5, y: 5}
+  timeSlow: 0.05
 --- !u!212 &6700494538990673751
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -211,7 +218,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 2a90242876b580646b7b17903aca5294, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e3ec57c94aa28654f87d2c3f51450ff6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -240,8 +247,8 @@ Rigidbody2D:
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &6700494538990673747
 BoxCollider2D:
