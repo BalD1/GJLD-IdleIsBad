@@ -103,10 +103,12 @@ public class UIManager : MonoBehaviour
                 GameManager.Instance.StateOfGame = GameManager.GameState.MainMenu;
                 break;
             case "Retry":
+                GameManager.Instance.player.ChangeSprite(Player.State.Normal);
                 GameManager.Instance.ReloadMap();
                 GameManager.Instance.StateOfGame = GameManager.GameState.InGame;
                 break;
             case "NextLevel":
+                GameManager.Instance.player.ChangeSprite(Player.State.Normal);
                 GameManager.Instance.NextMap();
                 GameManager.Instance.StateOfGame = GameManager.GameState.InGame;
                 break;

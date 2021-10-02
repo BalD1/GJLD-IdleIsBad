@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
         HigherUnlockedLevel,
     }
 
-    [SerializeField] private GameObject player;
+    public Player player;
     [SerializeField] private List<GameObject> maps;
 #if UNITY_EDITOR
     [SerializeField] private bool resetProgress;

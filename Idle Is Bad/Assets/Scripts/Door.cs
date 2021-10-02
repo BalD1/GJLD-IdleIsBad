@@ -14,6 +14,7 @@ public class Door : MonoBehaviour
             if (player.HasKey)
             {
                 Destroy(lockObject);
+                player.ChangeSprite(Player.State.Happy);
                 player.HasKey = false;
                 GameManager.Instance.StateOfGame = GameManager.GameState.Win;
             }

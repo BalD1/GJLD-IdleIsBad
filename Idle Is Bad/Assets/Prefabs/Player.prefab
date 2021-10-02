@@ -287,6 +287,16 @@ MonoBehaviour:
   squashAndStetchMin: {x: 1.5, y: 0.8}
   squashAndStretchTime: 3
   timeBeforeNormal: 0.3
+  happyTime: 1
+  normal:
+    sprite: {fileID: 21300000, guid: e3ec57c94aa28654f87d2c3f51450ff6, type: 3}
+    playerState: 0
+  happy:
+    sprite: {fileID: 21300000, guid: 15f94069271e2404b81dd2254d533763, type: 3}
+    playerState: 2
+  dead:
+    sprite: {fileID: 21300000, guid: 471a18448326c7248b6b192d5fc1b073, type: 3}
+    playerState: 1
   playerCamera: {fileID: 6700494538739604140}
   cameraSpeed: 100
   cameraClamp: {x: 5, y: 5}

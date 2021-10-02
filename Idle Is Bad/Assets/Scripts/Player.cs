@@ -25,12 +25,29 @@ public class Player : MonoBehaviour
     [SerializeField] private Vector2 squashAndStetchMin;
     [SerializeField] private float squashAndStretchTime = 3f;
     [SerializeField] private float timeBeforeNormal = 0.5f;
+    [SerializeField] private float happyTime = 1f;
 
     private bool isJumping, isGrounded, goToNormalScale;
     public bool IsGrounded
     {
         get => isGrounded;
     }
+    public enum State
+    {
+        Normal,
+        Dead,
+        Happy,
+    }
+    [System.Serializable]
+    public struct Sprites
+    {
+        public Sprite sprite;
+        public State playerState;
+    }
+
+    [SerializeField] private Sprites normal;
+    [SerializeField] private Sprites happy;
+    [SerializeField] private Sprites dead;
 
     private float direction, squashAndStretchTimer;
 
@@ -50,6 +67,7 @@ public class Player : MonoBehaviour
         Camera,
     }
 
+
     public bool HasKey
     {
         get
@@ -59,6 +77,8 @@ public class Player : MonoBehaviour
         set
         {
             hasKey = value;
+            if(hasKey)
+                StartCoroutine(ChangeSprite(State.Happy, happyTime));
         }
     }
 
@@ -74,6 +94,7 @@ public class Player : MonoBehaviour
 
         goToNormalScale = false;
         squashAndStretchTimer = timeBeforeNormal;
+        ChangeSprite(State.Normal);
     }
 
     void Update()
@@ -213,8 +234,32 @@ public class Player : MonoBehaviour
         isGrounded = raycastHit.collider != null;
     }
 
-    private void Death()
+    public void ChangeSprite(State state)
     {
+        switch(state)
+        {
+            case State.Normal:
+                this.spriteRenderer.sprite = normal.sprite;
+                break;
+            case State.Dead:
+                this.spriteRenderer.sprite = dead.sprite;
+                break;
+            case State.Happy:
+                this.spriteRenderer.sprite = happy.sprite;
+                break;
+        }
+    }
+    public IEnumerator ChangeSprite(State state, float time)
+    {
+        Debug.Log("lol");
+        ChangeSprite(state);
+        yield return new WaitForSeconds(time);
+        ChangeSprite(State.Normal);
+    }
+
+    public void Death()
+    {
+        ChangeSprite(State.Dead);
         GameManager.Instance.StateOfGame = GameManager.GameState.GameOver;
     }
 }
