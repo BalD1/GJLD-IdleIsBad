@@ -59,8 +59,9 @@ public class GameManager : MonoBehaviour
 
                     if(DataKeep.higherUnlockedLevel == loadedMap.index)
                     {
-                        if (loadedMap.index < maps.Count - 1)
-                        DataKeep.higherUnlockedLevel += 1;
+                        if(loadedMap.index < maps.Count - 1m)
+                            if(maps[loadedMap.index + 1] != null)
+                                DataKeep.higherUnlockedLevel += 1;
                         PlayerPrefs.SetInt(PlayerPrefKeys.HigherUnlockedLevel.ToString(), DataKeep.higherUnlockedLevel);
                     }
                     break;
@@ -79,6 +80,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<GameObject> maps;
 #if UNITY_EDITOR
     [SerializeField] private bool resetProgress;
+    [SerializeField] private bool loadMap = true;
+    public bool canDestroy = true;
 #endif
     public List<GameObject> Maps
     {
@@ -106,6 +109,10 @@ public class GameManager : MonoBehaviour
         {
             loadedMap.map = GameObject.Instantiate(maps[DataKeep.mapToLoad - 1], Vector3.zero, Quaternion.identity);
             loadedMap.index = DataKeep.mapToLoad - 1;
+#if UNITY_EDITOR
+            if(!loadMap)
+                Destroy(loadedMap.map);
+#endif
         }
 
         if(PlayerPrefs.HasKey(PlayerPrefKeys.HigherUnlockedLevel.ToString()))
@@ -118,7 +125,10 @@ public class GameManager : MonoBehaviour
 
 #if UNITY_EDITOR
         if (resetProgress)
+        {
+            DataKeep.mapToLoad = 0;
             PlayerPrefs.SetInt(PlayerPrefKeys.HigherUnlockedLevel.ToString(), 0);
+        }
 #endif
     }
 

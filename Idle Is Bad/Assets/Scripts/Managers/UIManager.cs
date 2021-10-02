@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class UIManager : MonoBehaviour
 {
@@ -19,15 +21,18 @@ public class UIManager : MonoBehaviour
     [Header("Main Menu")]
 
     [SerializeField] private GameObject buttonsGrid;
+    [SerializeField] private GameObject levelsWindow;
     private List<GameObject> levelButtons;
 
     [Header("In Game")]
 
-    [SerializeField] private GameObject levelsWindow;
     [SerializeField] private GameObject pauseWindow;
+    [SerializeField] private GameObject pauseFirstSelected;
     [SerializeField] private GameObject winWindow;
+    [SerializeField] private GameObject winFirstSelected;
     [SerializeField] private GameObject nextLevelButton;
     [SerializeField] private GameObject gOWindow;
+    [SerializeField] private GameObject gOFirstSelected;
 
 
     public void WindowManager(GameManager.GameState gameState)
@@ -44,11 +49,13 @@ public class UIManager : MonoBehaviour
             case GameManager.GameState.Pause:
                 DeactivateAll();
                 pauseWindow.SetActive(true);
+                EventSystem.current.SetSelectedGameObject(pauseFirstSelected);
                 break;
 
             case GameManager.GameState.GameOver:
                 DeactivateAll();
                 gOWindow.SetActive(true);
+                EventSystem.current.SetSelectedGameObject(gOFirstSelected);
                 break;
 
             case GameManager.GameState.Win:
@@ -57,14 +64,16 @@ public class UIManager : MonoBehaviour
 
                 List<GameObject> maps = GameManager.Instance.Maps;
 
-                if(GameManager.Instance.GetLoadedMap.index == maps.Count - 1)
+                if(GameManager.Instance.GetLoadedMap.index == maps.Count - 1 || maps[GameManager.Instance.GetLoadedMap.index + 1] == null)
                     nextLevelButton.SetActive(false);
                 else
                     nextLevelButton.SetActive(true);
+                EventSystem.current.SetSelectedGameObject(winFirstSelected);
                 break;
         }
 
     }
+
     private void DeactivateAll()
     {
         if(pauseWindow != null)
@@ -127,7 +136,6 @@ public class UIManager : MonoBehaviour
                 levelButtons.Add(child.gameObject);
 
             int higherUnlockedLevel = PlayerPrefs.GetInt(GameManager.PlayerPrefKeys.HigherUnlockedLevel.ToString());
-            Debug.Log(higherUnlockedLevel);
             int index = 0;
             foreach(GameObject button in levelButtons)
             {

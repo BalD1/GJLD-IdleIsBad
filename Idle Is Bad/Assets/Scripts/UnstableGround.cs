@@ -7,10 +7,15 @@ public class UnstableGround : MonoBehaviour
     [SerializeField] private float timeBeforeDestruction = 1;
     [SerializeField] private Animator animator;
 
-    private void OnCollisionEnter2D(Collision2D collision)
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag.Equals("Player"))
+        if (collision.tag.Equals("PlayerFeets"))
         {
+#if UNITY_EDITOR
+            if(!GameManager.Instance.canDestroy)
+                return;
+#endif
             StartCoroutine(destructionTimer(timeBeforeDestruction));
         }
     }
