@@ -21,7 +21,6 @@ public class UnstableGround : MonoBehaviour
     {
         if (collision.tag.Equals("PlayerFeets"))
         {
-            if (collision.GetComponentInParent<Player>().IsGrounded)
 #if UNITY_EDITOR
             if(!GameManager.Instance.canDestroy)
                 return;

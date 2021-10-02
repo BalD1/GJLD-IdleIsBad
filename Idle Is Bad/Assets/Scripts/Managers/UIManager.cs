@@ -20,6 +20,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Main Menu")]
 
+    [SerializeField] private GameObject title;
     [SerializeField] private GameObject buttonsGrid;
     [SerializeField] private GameObject levelsWindow;
     private List<GameObject> levelButtons;
@@ -90,6 +91,7 @@ public class UIManager : MonoBehaviour
         {
             case "Play":
                 levelsWindow.SetActive(!levelsWindow.activeSelf);
+                title.SetActive(!title.activeSelf);
                 break;
             case "Quit":
                 Application.Quit();
@@ -142,6 +144,7 @@ public class UIManager : MonoBehaviour
                 if(index > higherUnlockedLevel)
                     return;
                 button.transform.GetChild(0).gameObject.SetActive(false);
+                button.GetComponent<Button>().interactable = true;
                 index++;
 
             }
