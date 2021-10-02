@@ -27,6 +27,10 @@ public class Player : MonoBehaviour
     [SerializeField] private float timeBeforeNormal = 0.5f;
 
     private bool isJumping, isGrounded, goToNormalScale;
+    public bool IsGrounded
+    {
+        get => isGrounded;
+    }
 
     private float direction, squashAndStretchTimer;
 

@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - PlayerFeets
+  - FriableGround
   layers:
   - Default
   - TransparentFX
