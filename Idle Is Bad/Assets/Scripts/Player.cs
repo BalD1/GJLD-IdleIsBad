@@ -21,10 +21,16 @@ public class Player : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private bool hasKey = false;
     [SerializeField] private Control currentControl;
+    [SerializeField] private Vector2 squashAndStetchMax;
+    [SerializeField] private Vector2 squashAndStetchMin;
+    [SerializeField] private float squashAndStretchTime = 3f;
+    [SerializeField] private float timeBeforeNormal = 0.5f;
 
-    private bool isJumping, isGrounded;
+    private bool isJumping, isGrounded, goToNormalScale;
 
-    private float direction;
+    private float direction, squashAndStretchTimer;
+
+    private Vector2 newColliderSize;
 
     [Header("Camera")]
     [SerializeField] private Camera playerCamera;
@@ -61,6 +67,9 @@ public class Player : MonoBehaviour
             this.gameObject.GetComponent<SpriteRenderer>();
         if(playerCamera == null)
             playerCamera = Camera.main;
+
+        goToNormalScale = false;
+        squashAndStretchTimer = timeBeforeNormal;
     }
 
     void Update()
@@ -133,6 +142,8 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
+        SquashAndStretch();
+
         if(isGrounded && Input.GetButtonDown("Jump"))
         {
             isJumping = true;
@@ -152,6 +163,32 @@ public class Player : MonoBehaviour
 
         if(Input.GetButtonUp("Jump"))
             isJumping = false;
+    }
+
+    private void SquashAndStretch()
+    {
+        newColliderSize.x = spriteRenderer.transform.localScale.x;
+        newColliderSize.y = boxCollider.size.y;
+        boxCollider.size = newColliderSize;
+        if(!isGrounded)
+        {
+            spriteRenderer.transform.localScale = Vector3.Lerp(spriteRenderer.transform.localScale, squashAndStetchMax, Time.deltaTime * squashAndStretchTime);
+            goToNormalScale = false;
+            squashAndStretchTimer = timeBeforeNormal;
+        }
+        else if(isGrounded && !goToNormalScale)
+        {
+            squashAndStretchTimer -= Time.deltaTime;
+            spriteRenderer.transform.localScale = Vector3.Lerp(spriteRenderer.transform.localScale, squashAndStetchMin, Time.deltaTime * squashAndStretchTime);
+            if(squashAndStretchTimer <= 0)
+                goToNormalScale = true;
+        }
+        else if (isGrounded && goToNormalScale)
+        {
+            spriteRenderer.transform.localScale = Vector3.Lerp(spriteRenderer.transform.localScale, Vector3.one, Time.deltaTime * squashAndStretchTime);
+            if(spriteRenderer.transform.localScale.Equals(Vector3.one))
+                goToNormalScale = false;
+        }
     }
 
     private void CheckSurroundings()

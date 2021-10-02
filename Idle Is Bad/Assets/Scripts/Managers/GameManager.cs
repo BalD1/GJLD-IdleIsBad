@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
                     break;
                 case GameState.Win:
                     player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-                    Time.timeScale = 0;
+                    Time.timeScale = 1;
 
                     if(DataKeep.higherUnlockedLevel == loadedMap.index)
                     {
@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start()
-    {
+    {      
         if(loadedMap.map == null && StateOfGame != GameState.MainMenu)
         {
             loadedMap.map = GameObject.Instantiate(maps[DataKeep.mapToLoad - 1], Vector3.zero, Quaternion.identity);
