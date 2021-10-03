@@ -127,15 +127,17 @@ public class Player : MonoBehaviour
 
             if(currentControl == Control.Camera)
                 CameraMovements();
+
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                if(GameManager.Instance.StateOfGame.Equals(GameManager.GameState.InGame))
+                    GameManager.Instance.StateOfGame = GameManager.GameState.Pause;
+                else
+                    GameManager.Instance.StateOfGame = GameManager.GameState.InGame;
+            }
         }
 
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            if(GameManager.Instance.StateOfGame.Equals(GameManager.GameState.InGame))
-                GameManager.Instance.StateOfGame = GameManager.GameState.Pause;
-            else
-                GameManager.Instance.StateOfGame = GameManager.GameState.InGame;
-        }
+
 
         if(this.transform.position.y <= -5 && !deathFlag)
             Death();
