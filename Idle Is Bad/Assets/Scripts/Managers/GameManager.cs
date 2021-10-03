@@ -44,6 +44,8 @@ public class GameManager : MonoBehaviour
                 case GameState.InGame:
                     if(gameState == GameState.MainMenu)
                         ChangeScene("MainScene");
+                    if(player != null)
+                        player.Gravity(1);
                     Time.timeScale = 1;
                     break;
                 case GameState.Pause:
@@ -140,6 +142,8 @@ public class GameManager : MonoBehaviour
     public void ReloadMap()
     {
         Destroy(loadedMap.map);
+        AudioManager.Instance.StopMusic();
+        AudioManager.Instance.PlayMusic(AudioManager.ClipsTags.MainTheme);
         loadedMap.map = GameObject.Instantiate(maps[loadedMap.index], Vector3.zero, Quaternion.identity);
         player.transform.position = Vector2.zero;
     }

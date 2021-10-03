@@ -16,6 +16,7 @@ public class Door : MonoBehaviour
                 Destroy(lockObject);
                 player.ChangeSprite(Player.State.Happy);
                 player.HasKey = false;
+                AudioManager.Instance.Play2DSound(AudioManager.ClipsTags.Win);
                 GameManager.Instance.StateOfGame = GameManager.GameState.Win;
             }
         }

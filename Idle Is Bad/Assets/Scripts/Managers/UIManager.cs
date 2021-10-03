@@ -35,6 +35,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject gOWindow;
     [SerializeField] private GameObject gOFirstSelected;
 
+    [Header("All")]
+
+    [SerializeField] private GameObject optionsWindow;
 
     public void WindowManager(GameManager.GameState gameState)
     {
@@ -75,6 +78,7 @@ public class UIManager : MonoBehaviour
 
     }
 
+
     private void DeactivateAll()
     {
         if(pauseWindow != null)
@@ -87,31 +91,56 @@ public class UIManager : MonoBehaviour
 
     public void OnButtonPress(string button)
     {
+        AudioManager.Instance.Play2DSound(AudioManager.ClipsTags.Clic);
+
         switch(button)
         {
             case "Play":
                 levelsWindow.SetActive(!levelsWindow.activeSelf);
-                title.SetActive(!title.activeSelf);
+
+                if(optionsWindow.activeSelf)
+                    optionsWindow.SetActive(false);
+                else
+                    title.SetActive(!title.activeSelf);
                 break;
+
             case "Quit":
                 Application.Quit();
                 break;
+
             case "Continue":
                 GameManager.Instance.StateOfGame = GameManager.GameState.InGame;
                 break;
+
             case "MainMenu":
                 GameManager.Instance.StateOfGame = GameManager.GameState.MainMenu;
                 break;
+
+            case "Options":
+                optionsWindow.SetActive(!optionsWindow.activeSelf);
+
+                if (levelsWindow.activeSelf)
+                    levelsWindow.SetActive(false);
+                else
+                    title.SetActive(!title.activeSelf);
+                break;
+
+            case "OptionsInGame":
+                optionsWindow.SetActive(!optionsWindow.activeSelf);
+                break;
+
             case "Retry":
                 GameManager.Instance.player.ChangeSprite(Player.State.Normal);
                 GameManager.Instance.ReloadMap();
                 GameManager.Instance.StateOfGame = GameManager.GameState.InGame;
                 break;
+
             case "NextLevel":
                 GameManager.Instance.player.ChangeSprite(Player.State.Normal);
                 GameManager.Instance.NextMap();
                 GameManager.Instance.StateOfGame = GameManager.GameState.InGame;
                 break;
+
             default:
                 Debug.LogError(button + " button not found in switch statement.");
                 break;

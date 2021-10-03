@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     [SerializeField] private BoxCollider2D boxCollider;
     [SerializeField] private Rigidbody2D body;
     [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private AudioSource audioSource;
     [SerializeField] private bool hasKey = false;
     [SerializeField] private Control currentControl;
     [SerializeField] private Vector2 squashAndStetchMax;
@@ -27,7 +28,9 @@ public class Player : MonoBehaviour
     [SerializeField] private float timeBeforeNormal = 0.5f;
     [SerializeField] private float happyTime = 1f;
 
-    private bool isJumping, isGrounded, goToNormalScale;
+    private bool isJumping, isGrounded, goToNormalScale, deathFlag;
+    private AudioClip jumpSound;
+
     public bool IsGrounded
     {
         get => isGrounded;
@@ -95,6 +98,12 @@ public class Player : MonoBehaviour
         goToNormalScale = false;
         squashAndStretchTimer = timeBeforeNormal;
         ChangeSprite(State.Normal);
+
+    }
+
+    private void Start()
+    {
+        jumpSound = AudioManager.Instance.GetAudioClip(AudioManager.ClipsTags.Jump);
     }
 
     void Update()
@@ -127,7 +136,7 @@ public class Player : MonoBehaviour
                 GameManager.Instance.StateOfGame = GameManager.GameState.InGame;
         }
 
-        if(this.transform.position.y <= -5)
+        if(this.transform.position.y <= -5 && !deathFlag)
             Death();
     }
     private void FixedUpdate()
@@ -171,6 +180,7 @@ public class Player : MonoBehaviour
 
         if(isGrounded && Input.GetButtonDown("Jump"))
         {
+            audioSource.PlayOneShot(jumpSound);
             isJumping = true;
             jumpTimeCounter = jumpTime;
             body.velocity = Vector2.up * jumpHeight;
@@ -230,6 +240,7 @@ public class Player : MonoBehaviour
         {
             case State.Normal:
                 this.spriteRenderer.sprite = normal.sprite;
+                deathFlag = false;
                 break;
             case State.Dead:
                 this.spriteRenderer.sprite = dead.sprite;
@@ -248,8 +259,17 @@ public class Player : MonoBehaviour
 
     public void Death()
     {
+        deathFlag = true;
         HasKey = false;
+        body.gravityScale = 0;
         ChangeSprite(State.Dead);
+        AudioManager.Instance.StopMusic();
+        AudioManager.Instance.PlayMusic(AudioManager.ClipsTags.GameOver);
         GameManager.Instance.StateOfGame = GameManager.GameState.GameOver;
+    }
+
+    public void Gravity(float scale)
+    {
+        body.gravityScale = 1;
     }
 }

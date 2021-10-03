@@ -9,6 +9,7 @@ public class Key : MonoBehaviour
         Player player = collision.gameObject.GetComponent<Player>();
         if(player != null)
         {
+            AudioManager.Instance.Play2DSound(AudioManager.ClipsTags.Key);
             player.HasKey = true;
             Destroy(this.gameObject);
         }
