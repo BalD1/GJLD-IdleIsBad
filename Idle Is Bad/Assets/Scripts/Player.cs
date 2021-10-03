@@ -108,19 +108,20 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        currentControl = Input.GetKey(KeyCode.LeftShift) ? Control.Camera : Control.Player;
-        if(currentControl == Control.Camera)
-            Time.timeScale = timeSlow;
-        else if(currentControl == Control.Player)
-        {
-            Time.timeScale = 1;
-            resetedCameraPos = this.transform.position;
-            resetedCameraPos.z = playerCamera.transform.position.z;
-            playerCamera.transform.position = resetedCameraPos;
-        }
 
         if(GameManager.Instance.StateOfGame.Equals(GameManager.GameState.InGame))
         {
+            currentControl = Input.GetKey(KeyCode.LeftShift) ? Control.Camera : Control.Player;
+            if(currentControl == Control.Camera)
+                Time.timeScale = timeSlow;
+            else if(currentControl == Control.Player)
+            {
+                Time.timeScale = 1;
+                resetedCameraPos = this.transform.position;
+                resetedCameraPos.z = playerCamera.transform.position.z;
+                playerCamera.transform.position = resetedCameraPos;
+            }
+
             CheckSurroundings();
             Jump();
 
