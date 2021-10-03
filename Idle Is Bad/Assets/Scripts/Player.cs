@@ -220,17 +220,7 @@ public class Player : MonoBehaviour
     {
         
         RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0f, Vector2.down, groundCheckLength, groundMask);
-        Color rayColor;
-        if(raycastHit.collider != null)
-        {
-            rayColor = Color.green;
-        }
-        else
-            rayColor = Color.red;
 
-        Debug.DrawRay(boxCollider.bounds.center + new Vector3(boxCollider.bounds.extents.x, 0), Vector2.down * (boxCollider.bounds.extents.y + groundCheckLength), rayColor);
-        Debug.DrawRay(boxCollider.bounds.center - new Vector3(boxCollider.bounds.extents.x, 0), Vector2.down * (boxCollider.bounds.extents.y + groundCheckLength), rayColor);
-        Debug.DrawRay(boxCollider.bounds.center - new Vector3(boxCollider.bounds.extents.x, boxCollider.bounds.extents.y), Vector2.right * (boxCollider.bounds.extents.x), rayColor);
         isGrounded = raycastHit.collider != null;
     }
 
@@ -251,7 +241,6 @@ public class Player : MonoBehaviour
     }
     public IEnumerator ChangeSprite(State state, float time)
     {
-        Debug.Log("lol");
         ChangeSprite(state);
         yield return new WaitForSeconds(time);
         ChangeSprite(State.Normal);
@@ -259,6 +248,7 @@ public class Player : MonoBehaviour
 
     public void Death()
     {
+        HasKey = false;
         ChangeSprite(State.Dead);
         GameManager.Instance.StateOfGame = GameManager.GameState.GameOver;
     }
